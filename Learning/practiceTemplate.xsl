@@ -20,12 +20,14 @@
   </xsl:template>
 
   <xsl:template match="cd">
-  <xsl:if test="price &gt; 7.9">
-    <tr>
-      <xsl:apply-templates select="title"/>
-      <xsl:apply-templates select="artist"/>
-      <xsl:value-of select="price"/>
-    </tr>
+    <xsl:if test="price &gt; 7.9">
+      <tr>
+        <xsl:apply-templates select="title"/>
+        <xsl:apply-templates select="artist"/>
+        <td>
+          <xsl:value-of select="price"/>
+        </td>
+      </tr>
     </xsl:if>
   </xsl:template>
 

@@ -14,4 +14,59 @@ XSL->
     1. 有點像AngularJS的一些 *ngFor, *ngIf, 做一些邏緝處理, 
     2. 然後XML去插入該.xsl, 該XML便會依該xsl轉換成新的呈現方式:
     例如從test.xml 插入 test.xs:
-        <?xml-stylesheet type="text/xsl" href="test.xsl"?>
+        <?xml-stylesheet type="text/xsl" href="test.xsl"?>-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+XSL 都有此定義開頭:
+<xsl:stylesheet version="1.0" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+..
+..
+..
+</xsl:stylesheet>
+-------------------------------------------------------------------------------------
+在xsl去foreach xml:
+如下範例, 從xml中去foreach所有在
+<catalog> 底下的 <cd> 屬性:
+    <xsl:for-each select="catalog/cd">
+-------------------------------------------------------------------------------------
+在xsl:for-each 內進行排序:
+如下範例則用xml的<price>大到小排序
+    <xsl:sort select="price"/>
+-------------------------------------------------------------------------------------
+if 判斷
+比較符號:
+    = ->等於
+    != ->不等於
+    &gt ->大於
+    &lt ->小於
+如下範例則用xml的<price>, 只取大於7.9的資料
+    <xsl:if test="price &gt; 7.9">
+-------------------------------------------------------------------------------------
+多重判斷:
+以下範例: 
+1. 若符合when條件, 則顯示不同背景顏色
+2. 最後一個不帶條件判斷為otherwise
+3.1. 注意判斷參數應以大至小排序, 以下為例
+3.2. 先判斷大於10再判斷大於9
+3.3. 判斷大於9的部份則同時小於等於10
+    <xsl:choose>
+        <xsl:when test="price &gt; 10">
+        <td bgcolor="#ff00ff">
+            <xsl:value-of select="artist"/>
+        </td>
+        </xsl:when>
+        <!--小於等於10, 大於9-->
+        <xsl:when test="price &gt; 9">
+        <td bgcolor="#cccccc">
+            <xsl:value-of select="artist"/>
+        </td>
+        </xsl:when>
+        <xsl:otherwise>
+        <td>
+            <xsl:value-of select="artist"/>
+        </td>
+        </xsl:otherwise>
+        <!--多重判斷-結束-->
+    </xsl:choose>
+------------------------------------------------------------------------------------
+   
