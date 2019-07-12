@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <script>
         function loadXMLDoc(filename) {
@@ -17,7 +18,7 @@
 
         function displayResult(test) {
             xml = loadXMLDoc("pratice_mutipleXSL.xml");
-            if(test)
+            if (test)
                 xsl = loadXMLDoc("pratice_mutipleXSL.xsl");
             else
                 xsl = loadXMLDoc("practice_Template.xsl");
@@ -36,6 +37,23 @@
         }
     </script>
 </head>
+<!--
+ The loadXMLDoc() function does the following:
+    1. Create an XMLHttpRequest object
+    2. Use the open() and send() methods of the XMLHttpRequest object to send a request to a server
+    3. Get the response data as XML data
+    
+The displayResult() function is used to display the XML file styled by the XSL file:
+    1. Load XML and XSL files
+    2. Test what kind of browser the user has
+    3. If Internet Explorer:
+        3-1. Use the transformNode() method to apply the XSL style sheet to the xml document
+        3-2. Set the body of the current document (id="example") to contain the styled xml document
+    4. If other browsers:
+        4-1. Create a new XSLTProcessor object and import the XSL file to it
+        4-2. Use the transformToFragment() method to apply the XSL style sheet to the xml document
+        4-3. Set the body of the current document (id="example") to contain the styled xml document
+-->
 
 <body onload="displayResult(false)">
     <div id="example" />
