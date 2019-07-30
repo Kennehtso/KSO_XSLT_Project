@@ -1,0 +1,8 @@
+What is XQuery?
+
+XQuery is the language for querying XML data
+XQuery for XML is like SQL for databases
+XQuery is built on XPath expressions
+XQuery is supported by all major databases
+XQuery is a W3C Recommendation
+-------------------------------------------------------------------------------------

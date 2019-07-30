@@ -1,0 +1,21 @@
+#取得該XML(practice_XQuery.xml)所有title:
+
+  doc("practice_ForEach.xml")/catalog/cd/title
+-------------------------------------------------------------------------------------
+#取得該XML(practice_XQuery.xml)所有金額(price)大於10的資料:
+一般做法:
+  doc("practice_ForEach.xml")/catalog/cd[price>10]
+FLWOR做法:
+  for $x in doc("practice_ForEach.xml")/catalog/cd
+    where $x/price>10
+    return $x
+-------------------------------------------------------------------------------------
+What is FLWOR?
+FLWOR (pronounced "flower") is an acronym for "For, Let, Where, Order by, Return".
+
+For - selects a sequence of nodes
+Let - binds a sequence to a variable
+Where - filters the nodes
+Order by - sorts the nodes
+Return - what to return (gets evaluated once for every node)
+-------------------------------------------------------------------------------------

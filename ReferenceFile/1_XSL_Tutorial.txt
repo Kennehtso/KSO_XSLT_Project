@@ -14,7 +14,7 @@ XSL->
     1. 有點像AngularJS的一些 *ngFor, *ngIf, 做一些邏緝處理, 
     2. 然後XML去插入該.xsl, 該XML便會依該xsl轉換成新的呈現方式:
     例如從test.xml 插入 test.xs:
-        <?xml-stylesheet type="text/xsl" href="test.xsl"?>-------------------------------------------------------------------------------------
+        <?xml-stylesheet type="text/xsl" href="test.xsl"?>
 -------------------------------------------------------------------------------------
 XSL 都有此定義開頭:
 <xsl:stylesheet version="1.0" 
