@@ -5,12 +5,12 @@ Provide a pratice to merge data from different excel table
 @author: kenne
 """
  
-import openpyxl, json, decimal
+import openpyxl
 
 class Subjects(object):
-    def __init__(self, name):
+    def __init__(self, name, interval):
         self.name = name
-        self.interval
+        self.interval = interval
         
 class Carers(object):
     def __init__(self, name, timeStamp):
@@ -20,8 +20,11 @@ class Carers(object):
 def getAvailableCarers(time, carers):
     resultList = []
     for i in range(0, len(carers)):
-        if time not in carers[i].timeStamp:
+        name = carers[i].name
+        if time in carers[i].timeStamp:
             resultList.append(carers[i].name)
+    if len(resultList) == 0:
+        resultList.append('--找不到關懷員匹配--')
     return resultList
 
 def frange(x, y, jump):  
@@ -29,28 +32,52 @@ def frange(x, y, jump):
     yield x  
     x += jump 
     
-def getSubjectsData(sheet, carers):
+def getSubjectsData(sheet, timePeriod, carers, wb):
     resultList = []
-    for i in range(1, sheet.max_row+1):
-        currentSubjectnName = sheet.cell(row=i, column=1).value
-        subject = Subjects(currentSubjectnName)
+    # generate new result sheet
+    wb.create_sheet('Merge_Result',len(wb.worksheets))
+    sheet_Merge_Result = wb.worksheets[len(wb.worksheets)-1]
+    
+    for i in range(1, sheet_Subjects.max_row+1):
+        currentSubjectnName = sheet_Subjects.cell(row=i, column=1).value
+        #UPDATE RESULT SHEET - ROW TITLE
+        sheet_Merge_Result.cell(row=i, column=1).value = currentSubjectnName
+        
         interval = {}
-        for j in range (2, sheet.max_column+1):
-            timeStamp = sheet.cell(row=i, column=j).value
+        timePeriodIndex = 0
+        for j in range (2, sheet_Subjects.max_column + 1):
+        #for j in range(2, len(timePeriod)) :
+            timeStamp = sheet_Subjects.cell(row=i, column=j).value
             if timeStamp != None:
                 interval[timeStamp] = getAvailableCarers(timeStamp, carers)
+                sheet_Merge_Result.cell(row=i, column=j).value = str(interval[timeStamp])
                 #subject = Subjects(currentSubjectnName,timeStamp, getAvailableCarers(timeStamp, carers))
             else:
-                interval[timeStamp] = '--此時段不適用--'
+                interval[timePeriod[timePeriodIndex]] = ['--此時段不適用--']
+                sheet_Merge_Result.cell(row=i, column=j).value = str(interval[timePeriod[timePeriodIndex]])
                #subject = Subjects(currentSubjectnName,timeStamp, ['--此時段不適用--']) 
-            resultList.append(subject)
+            timePeriodIndex+=1
+        subject = Subjects(currentSubjectnName, interval) 
+        resultList.append(subject)
     
+    
+    sheet_Merge_Result.insert_rows(1)
+    index = 0
+    for i in range(2, sheet_Merge_Result.max_column + 1):
+         sheet_Merge_Result.cell(row=1, column=i).value = timePeriod[index]
+         index+=1
     # Log
     for i in range(0, len(resultList)):
-        print(resultList[i].name,';',resultList[i].timeStamp,';', resultList[i].carers)
+        print(resultList[i].name,' : ')
+        for item in resultList[i].interval.items():
+            print(item)
+            print("----------------------------")
         print("-------------------------------------------------------------")
-        
-    return resultList
+    
+    
+    wb.save("Carer Schedule.xlsx")
+    #return resultList
+
 
 def getCarersData(sheet):
     resultList = []
@@ -111,15 +138,10 @@ maxValue = getMaxValue(sheet_Subjects)
 timePeriod = getTimePeriod(maxValue) 
 
 carers = getCarersData(sheet_Carers)
-#subjects = getSubjectsData(sheet_Subjects, carers)
 
+#Update Result By subjects
+subjects = getSubjectsData(sheet_Subjects, timePeriod, carers ,wb)
 
-# generate new result sheet
-wb.create_sheet('Merge_Result',len(wb.worksheets))
-sheet_Merge_Result = wb.worksheets[len(wb.worksheets)-1]
-
-
-wb.save("Carer Schedule.xlsx")
 
 
 """ End fo R&M """
